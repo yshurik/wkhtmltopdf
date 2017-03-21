@@ -43,6 +43,8 @@
 #include <io.h>
 #endif
 
+#include <QXmlQuery>
+
 #include "dllbegin.inc"
 using namespace wkhtmltopdf;
 using namespace wkhtmltopdf::settings;
@@ -466,7 +468,27 @@ void PdfConverterPrivate::loadTocs() {
 		StreamDumper sd(path);
 		outline->dump(sd.stream, style);
 
-		obj.loaderObject = tocLoader->addResource(path, ps.load);
+		QString out;
+		QXmlQuery query(QXmlQuery::XSLT20);
+		query.setFocus(QUrl(path));
+		query.setQuery(QUrl(style));
+		query.evaluateTo(&out);
+
+		QString url = obj.tocFile.create(".html");
+		QFile tmp(url);
+		QTextStream tmpout(&tmp);
+		if (!tmp.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
+		}
+		tmpout.setCodec("UTF-8");
+		out = out.replace("<ul/>","");
+		out = out.replace("xmlns:ns0=\"http://www.w3.org/1999/xhtml\"", "");
+		out = out.replace("ns0:", "");
+		tmpout << out;
+
+		//TempFile
+		obj.loaderObject = tocLoader->addResource(url, ps.load);
+		//obj.loaderObject = tocLoader->addResource(path, ps.load);
+
 		obj.page = &obj.loaderObject->page;
 		PageObject::webPageToObject[obj.page] = &obj;
 		updateWebSettings(obj.page->settings(), ps.web);
@@ -651,7 +673,8 @@ void PdfConverterPrivate::endPage(PageObject & object, bool hasHeaderFooter, int
 void PdfConverterPrivate::handleTocPage(PageObject & obj) {
 	painter->save();
 	QWebPrinter wp(obj.page->mainFrame(), printer, *painter);
-	int pc = obj.settings.pagesCount? wp.pageCount(): 0;
+	//int pc = obj.settings.pagesCount? wp.pageCount(): 0;
+	int pc = 1;
 	if (pc != obj.pageCount) {
 		obj.pageCount = pc;
 		tocChanged=true;

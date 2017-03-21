@@ -78,6 +78,7 @@ public:
 	int pageCount;
 	TempFile tocStyleFile;
 	TempFile tocFile;
+	TempFile tocHtmlFile;
 
 	void clear() {
 #ifdef __EXTENSIVE_WKHTMLTOPDF_QT_HACK__
@@ -91,6 +92,7 @@ public:
  		page=0;
 		tocStyleFile.remove();
 		tocFile.remove();
+		tocHtmlFile.remove();
 	}
 
 	PageObject(const settings::PdfObject & set, const QString * d=NULL):

@@ -126,7 +126,7 @@ struct DefaultTocFunc {
 		file.open(stdout, QIODevice::WriteOnly | QIODevice::Text);
 		QTextStream stream(&file);
 		wkhtmltopdf::settings::TableOfContent toc;
-		wkhtmltopdf::dumpDefaultTOCStyleSheet(stream, toc);
+		//wkhtmltopdf::dumpDefaultTOCStyleSheet(stream, toc);
 		exit(0);
 	}
 };
