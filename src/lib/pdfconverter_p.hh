@@ -72,6 +72,7 @@ public:
 	QList<QWebPage *> footers;
 	int pageCount;
 	TempFile tocFile;
+	TempFile tocHtmlFile;
 
 	void clear() {
 #ifdef __EXTENSIVE_WKHTMLTOPDF_QT_HACK__
@@ -84,6 +85,7 @@ public:
 		webPageToObject.remove(page);
  		page=0;
 		tocFile.removeAll();
+		tocHtmlFile.remove();
 	}
 
 	PageObject(const settings::PdfObject & set, const QString * d=NULL):
