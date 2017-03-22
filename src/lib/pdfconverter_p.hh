@@ -85,7 +85,7 @@ public:
 		webPageToObject.remove(page);
  		page=0;
 		tocFile.removeAll();
-		tocHtmlFile.remove();
+		tocHtmlFile.removeAll();
 	}
 
 	PageObject(const settings::PdfObject & set, const QString * d=NULL):
